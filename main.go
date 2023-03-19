@@ -11,6 +11,8 @@ import (
 const (
 	MOUSEEVENTF_LEFTDOWN = 0x0002
 	MOUSEEVENTF_LEFTUP   = 0x0004
+	KEY_SHIFT            = 0x10
+	KEY_PRESSED          = 0x8000
 )
 
 var (
@@ -27,12 +29,12 @@ type POINT struct {
 func main() {
 	// シフトキーが押されているときだけ
 	// クリックを行う
-
+	clicks := 100
 	interval := 100
 	for {
 		if isShiftPressed() {
 			log.Println("Click!")
-			for i := 0; i < 100; i++ {
+			for i := 0; i < clicks; i++ {
 				clickMouse()
 				time.Sleep(time.Duration(interval) * time.Millisecond)
 			}
@@ -44,8 +46,8 @@ func main() {
 func isShiftPressed() bool {
 	// 0x8000: キーが押されている
 	// 0x0000: キーが押されていない
-	ret, _, _ := procGetAsyncKeyState.Call(uintptr(0x10))
-	if ret == 0x8000 {
+	ret, _, _ := procGetAsyncKeyState.Call(uintptr(KEY_SHIFT))
+	if ret == KEY_PRESSED {
 		return true
 	}
 	return false

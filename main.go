@@ -11,8 +11,39 @@ import (
 const (
 	MOUSEEVENTF_LEFTDOWN = 0x0002
 	MOUSEEVENTF_LEFTUP   = 0x0004
-	KEY_SHIFT            = 0x10
 	KEY_PRESSED          = 0x8000
+)
+
+const (
+	KEY_SHIFT = 0x10
+	KEY_CTRL  = 0x11
+	KEY_ALT   = 0x12
+	KEY_A     = 0x41
+	KEY_B     = 0x42
+	KEY_C     = 0x43
+	KEY_D     = 0x44
+	KEY_E     = 0x45
+	KEY_F     = 0x46
+	KEY_G     = 0x47
+	KEY_H     = 0x48
+	KEY_I     = 0x49
+	KEY_J     = 0x4A
+	KEY_K     = 0x4B
+	KEY_L     = 0x4C
+	KEY_M     = 0x4D
+	KEY_N     = 0x4E
+	KEY_O     = 0x4F
+	KEY_P     = 0x50
+	KEY_Q     = 0x51
+	KEY_R     = 0x52
+	KEY_S     = 0x53
+	KEY_T     = 0x54
+	KEY_U     = 0x55
+	KEY_V     = 0x56
+	KEY_W     = 0x57
+	KEY_X     = 0x58
+	KEY_Y     = 0x59
+	KEY_Z     = 0x5A
 )
 
 var (
@@ -27,12 +58,13 @@ type POINT struct {
 }
 
 func main() {
-	// シフトキーが押されているときだけ
-	// クリックを行う
+	// 特定のキーが押されているときに実行する
+	// 標準はShiftキー
 	clicks := 100
 	interval := 10
+	KEY := KEY_SHIFT
 	for {
-		if isShiftPressed() {
+		if isKeyPressed(KEY) {
 			log.Println("Click!")
 			for i := 0; i < clicks; i++ {
 				clickMouse()
@@ -43,10 +75,10 @@ func main() {
 
 }
 
-func isShiftPressed() bool {
+func isKeyPressed(KEY int) bool {
 	// 0x8000: キーが押されている
 	// 0x0000: キーが押されていない
-	ret, _, _ := procGetAsyncKeyState.Call(uintptr(KEY_SHIFT))
+	ret, _, _ := procGetAsyncKeyState.Call(uintptr(KEY))
 	return ret == KEY_PRESSED
 }
 

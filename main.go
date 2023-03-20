@@ -30,7 +30,7 @@ func main() {
 	// シフトキーが押されているときだけ
 	// クリックを行う
 	clicks := 100
-	interval := 100
+	interval := 10
 	for {
 		if isShiftPressed() {
 			log.Println("Click!")
@@ -47,10 +47,7 @@ func isShiftPressed() bool {
 	// 0x8000: キーが押されている
 	// 0x0000: キーが押されていない
 	ret, _, _ := procGetAsyncKeyState.Call(uintptr(KEY_SHIFT))
-	if ret == KEY_PRESSED {
-		return true
-	}
-	return false
+	return ret == KEY_PRESSED
 }
 
 func getCursorPos() POINT {
